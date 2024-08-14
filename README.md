@@ -77,7 +77,6 @@ flask db --help
 ### Configuration
 
 Configuration is handled by environment variables. 
-
 One su za razvojno okruženje zapisane u fajlu `.flaskenv`
 
 ```
@@ -140,6 +139,7 @@ Sad možemo usporediti novi projekt s generiranim direktorijem, i odabrane promj
 Odabrane promjene upišeš u folder `apps_skeleton`
 
 Možeš ponoviti generiranje dok ne nestanu razlike.
+
 
 ### Authentication
 
