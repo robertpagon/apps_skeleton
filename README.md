@@ -21,25 +21,25 @@ Cookiecutter template for flask web and restful, including blueprints, applicati
 
 #### Install cookiecutter
 
-Make sure you have cookiecutter installed in your local machine.
+Cookiecutter kopira template projekt u drugi direktorij s time da sve varijable zamjenjuje zadanim vrijednostima.
+
+Prvo treba instalirati cookiecutter.
 
 You can install it using this command : 
-- `pipx install cookiecutter` - Ovako se instalira za sve, kao naredba - preporučeno
-- `pip install cookiecutter` - Ovako se instalira za sve
+- `pipx install cookiecutter` - Ovako je preporučeno da se instalira, vrlo čisto, slično kao neka linux naredba. Instaliranje `pipx`-a: `sudo apt install pipx`
+- `pip install cookiecutter` - A može i ovako.
 
 #### Create your project
 
 Najbolje je klonirati skeleton projekt i iz njega kreirati novi projekt.
 U tom slučaju se skeleton projekt može dodatno razvijati i pushati u git.
 ```
-mkdir /Projects/apps_skeleton
-cd /Projects/apps_skeleton
 git clone https://github.com/robertpagon/apps_skeleton.git
 cookiecutter . -o ..
 ```
 Tu se odabere naziv projekta (npr. `myproject`) i ime aplikacije (npr. `myapp`)
 
-A može se i samo kreirati novi projekt bez kloniranja skeleton projekta:
+A može se i samo kreirati novi projekt direktno iz gita, bez kloniranja skeleton projekta:
 `cookiecutter https://github.com/robertpagon/apps_skeleton`
 
 #### Install project requirements
@@ -71,29 +71,34 @@ To list all commands
 
 ```
 flask --help
+flask db --help
 ```
 
 ### Configuration
 
-Configuration is handled by environment variables, for development purpose you just
-need to update / add entries in `.flaskenv` file.
+Configuration is handled by environment variables. 
+
+```
+export FLASK_RUN_PORT=5183 # ako nećeš da bude na portu 5000
+export FLASK_DEBUG=1 # Automatski učitaj promjenu sorsova
+export APP_NAME="myapp"
+export APP_SETTINGS=myapp.config.ProductionConfig
+```
+
+`APP_NAME` i `APP_SETTINGS` su vezani za web dio.
+
+For development purpose you just
+need to update/add entries in `.flaskenv` file.
 
 It's filled by default with following content:
 
 ```
-export FLASK_RUN_PORT=5183 # ako nećeš da bude na portu 5000
-export FLASK_DEBUG=1 - Automatski učitaj promjenu sorsova
-
 FLASK_ENV=development
 FLASK_APP="myapp.app:create_app"
 SECRET_KEY=changeme
 DATABASE_URI="sqlite:///myapp.db"
 CELERY_BROKER_URL=amqp://guest:guest@localhost/  # only present when celery is enabled
 CELERY_RESULT_BACKEND_URL=amqp://guest:guest@localhost/  # only present when celery is enabled
-
-WEB
-   export APP_NAME="myapp"
-   export APP_SETTINGS=myapp.config.ProductionConfig
 ```
 
 Avaible configuration keys:
@@ -119,14 +124,14 @@ Da bi mogli dalje razvijati skeleton, treba usporediti novi projekt s trenutnim 
 
 Usporedba novog projekta s trenutnim stanjem skeletona:
 ```
-cd /Projects/apps_skeleton
+cd /apps_skeleton
 cookiecutter . -o ..
     project_name: myproject_original
     app_name: myapp
 ```
 
 U ovom folderu ne radiš promjene. On je samo za usporedbu s tvojom aplikacijom.
-Onda promjene upišeš u folder `/Projects/apps_skeleton`
+Onda promjene upišeš u folder `/apps_skeleton`
 Pa obrišeš ovaj dir `rm -r ../myproject_original`
 Ponovno generiraš `cookiecutter . -o ..`
 I ponocno usporediš `diff -r ../myproject_original ../myproject`
