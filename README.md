@@ -2,7 +2,7 @@
 
 Cookiecutter template for flask restful, including blueprints, application factory, and more
 
-[![Build Status](https://travis-ci.org/karec/cookiecutter-flask-restful.svg?branch=master)](https://travis-ci.org/karec/cookiecutter-flask-restful)
+[![Build Status](https://travis-ci.org/robertpagon/apps_skeleton.svg?branch=master)](https://travis-ci.org/robertpagon/apps_skeleton)
 
 ## Introduction
 
@@ -67,7 +67,7 @@ Starting a new project is as easy as running this command at the command line. N
 
 To create a project run the following command and follow the prompt
 
-`cookiecutter https://github.com/karec/cookiecutter-flask-restful`
+`cookiecutter https://github.com/robertpagon/apps_skeleton`
 
 #### Install project requirements
 

@@ -11,6 +11,16 @@ passlib
 apispec[yaml]
 apispec-webframeworks
 tox
+
+# WEB
+Flask-Bcrypt
+Flask-Bootstrap
+Flask-DebugToolbar
+Flask-Login
+Flask-Testing
+Flask-WTF
+email_validator
+
 {%- if cookiecutter.use_celery == "yes" %}
 celery[redis]>=5.0.0
 {%- endif %}

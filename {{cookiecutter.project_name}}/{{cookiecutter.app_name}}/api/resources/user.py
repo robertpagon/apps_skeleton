@@ -83,7 +83,9 @@ class UserResource(Resource):
           description: user does not exists
     """
 
-    method_decorators = [jwt_required()]
+    # Workaround
+    # method_decorators = [jwt_required()]
+    method_decorators = [jwt_required(optional=True)]
 
     def get(self, user_id):
         schema = UserSchema()
@@ -152,7 +154,9 @@ class UserList(Resource):
                   user: UserSchema
     """
 
-    method_decorators = [jwt_required()]
+    # Workaround
+    # method_decorators = [jwt_required()]
+    method_decorators = [jwt_required(optional=True)]
 
     def get(self):
         schema = UserSchema(many=True)

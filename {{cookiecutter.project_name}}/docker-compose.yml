@@ -1,7 +1,7 @@
 {%- if cookiecutter.wsgi_server == "uwsgi" -%}
-{% set web_command = "uwsgi --http 0.0.0.0:5000 --module " + cookiecutter.app_name + ".wsgi:app" %}
+{% set web_command = "uwsgi --http 0.0.0.0:5183 --module " + cookiecutter.app_name + ".wsgi:app" %}
 {%- elif cookiecutter.wsgi_server == "gunicorn" -%}
-{% set web_command = "gunicorn -b 0.0.0.0:5000 " + cookiecutter.app_name + ".wsgi:app" %}
+{% set web_command = "gunicorn -b 0.0.0.0:5183 " + cookiecutter.app_name + ".wsgi:app" %}
 {%- else -%}
 {% set web_command = "flask run -h 0.0.0.0" %}
 {%- endif -%}
@@ -25,7 +25,7 @@ services:
       - ./{{cookiecutter.app_name}}:/code/{{cookiecutter.app_name}}
       - ./db/:/db/
     ports:
-      - "5000:5000"
+      - "5183:5000"
 {%- if cookiecutter.use_celery == "yes" %}
   rabbitmq:
     image: rabbitmq

@@ -11,6 +11,7 @@ from {{cookiecutter.app_name}}.models import User
 from {{cookiecutter.app_name}}.extensions import pwd_context, jwt, apispec
 from {{cookiecutter.app_name}}.auth.helpers import revoke_token, is_token_revoked, add_token_to_database
 
+from threading import Lock
 
 blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -79,6 +80,7 @@ def login():
 
 @blueprint.route("/refresh", methods=["POST"])
 @jwt_required(refresh=True)
+# @jwt_required(refresh=True, optional = True)
 def refresh():
     """Get an access token from a refresh token
 
@@ -112,6 +114,7 @@ def refresh():
 
 @blueprint.route("/revoke_access", methods=["DELETE"])
 @jwt_required()
+# @jwt_required(optional = True)
 def revoke_access_token():
     """Revoke an access token
 
@@ -144,6 +147,7 @@ def revoke_access_token():
 
 @blueprint.route("/revoke_refresh", methods=["DELETE"])
 @jwt_required(refresh=True)
+# @jwt_required(refresh=True, optional = True)
 def revoke_refresh_token():
     """Revoke a refresh token, used mainly for logout
 
@@ -185,8 +189,21 @@ def check_if_token_revoked(jwt_headers, jwt_payload):
     return is_token_revoked(jwt_payload)
 
 
-@blueprint.before_app_first_request
+blueprint._before_request_lock = Lock()
+blueprint._got_first_request = False
+
+
+# @blueprint.before_app_first_request
+@blueprint.before_request
 def register_views():
+    if blueprint._got_first_request:
+        return
+    with blueprint._before_request_lock:
+        if blueprint._got_first_request:
+            return
+        blueprint._got_first_request = True
+# end Workaround
+
     apispec.spec.path(view=login, app=app)
     apispec.spec.path(view=refresh, app=app)
     apispec.spec.path(view=revoke_access_token, app=app)
