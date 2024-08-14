@@ -21,25 +21,25 @@ Cookiecutter template for flask web and restful, including blueprints, applicati
 
 #### Install cookiecutter
 
-Make sure you have cookiecutter installed in your local machine.
+Cookiecutter kopira template projekt u drugi direktorij s time da sve varijable zamjenjuje zadanim vrijednostima.
+
+Prvo treba instalirati cookiecutter.
 
 You can install it using this command : 
-- `pipx install cookiecutter` - Ovako se instalira za sve, kao naredba - preporučeno
-- `pip install cookiecutter` - Ovako se instalira za sve
+- `pipx install cookiecutter` - Ovako je preporučeno da se instalira, vrlo čisto, slično kao neka linux naredba. Instaliranje `pipx`-a: `sudo apt install pipx`
+- `pip install cookiecutter` - A može i ovako.
 
 #### Create your project
 
 Najbolje je klonirati skeleton projekt i iz njega kreirati novi projekt.
 U tom slučaju se skeleton projekt može dodatno razvijati i pushati u git.
 ```
-mkdir /Projects/apps_skeleton
-cd /Projects/apps_skeleton
 git clone https://github.com/robertpagon/apps_skeleton.git
-cookiecutter . -o ..
+cookiecutter apps_skeleton
 ```
-Tu se odabere naziv projekta (npr. `myproject`) i ime aplikacije (npr. `myapp`)
+Tu se odabere naziv projekta (npr. `my_project`) i ime aplikacije (npr. `my_app`)
 
-A može se i samo kreirati novi projekt bez kloniranja skeleton projekta:
+A može se i samo kreirati novi projekt direktno iz gita, bez kloniranja skeleton projekta:
 `cookiecutter https://github.com/robertpagon/apps_skeleton`
 
 #### Install project requirements
@@ -47,7 +47,7 @@ A može se i samo kreirati novi projekt bez kloniranja skeleton projekta:
 You can install it using pip :
 
 ```
-cd myproject
+cd my_project
 virtualenv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -71,30 +71,36 @@ To list all commands
 
 ```
 flask --help
+flask db --help
 ```
 
 ### Configuration
 
-Configuration is handled by environment variables, for development purpose you just
-need to update / add entries in `.flaskenv` file.
+Configuration is handled by environment variables. 
 
-It's filled by default with following content:
+One su za razvojno okruženje zapisane u fajlu `.flaskenv`
 
 ```
-export FLASK_RUN_PORT=5183 # ako nećeš da bude na portu 5000
-export FLASK_DEBUG=1 - Automatski učitaj promjenu sorsova
+FLASK_RUN_PORT=5183
+FLASK_DEBUG=1
 
 FLASK_ENV=development
-FLASK_APP="myapp.app:create_app"
+FLASK_APP="my_app.app:create_app"
 SECRET_KEY=changeme
-DATABASE_URI="sqlite:///myapp.db"
+DATABASE_URI="sqlite:///my_app.db"
 CELERY_BROKER_URL=amqp://guest:guest@localhost/  # only present when celery is enabled
 CELERY_RESULT_BACKEND_URL=amqp://guest:guest@localhost/  # only present when celery is enabled
-
-WEB
-   export APP_NAME="myapp"
-   export APP_SETTINGS=myapp.config.ProductionConfig
 ```
+
+A u produkciji se namjeste env. varijable:
+```
+export FLASK_RUN_PORT=5183 # ako nećeš da bude na portu 5000
+export FLASK_DEBUG=1 # Automatski učitaj promjenu sorsova
+export APP_NAME="my_app"
+export APP_SETTINGS=my_app.config.ProductionConfig
+```
+
+`APP_NAME` i `APP_SETTINGS` su vezani za web dio.
 
 Avaible configuration keys:
 
@@ -115,22 +121,25 @@ curl -X GET -H "Content-Type: application/json" http://localhost:5183/api/v1/use
 ```
 
 ## Daljnji razvoj skeletona
-Da bi mogli dalje razvijati skeleton, treba usporediti novi projekt s trenutnim stanjem skeletona, i odabrane promjene dodati u skeleton projekt.
 
-Usporedba novog projekta s trenutnim stanjem skeletona:
+Da bi mogli dalje razvijati skeleton, treba novo razvijenu logiku dodati u skeleton.
+Da bi mogli vidjeti sve promjene u novom projektu, trebamo generirati još jedan projekt iz skeletona.
+
 ```
-cd /Projects/apps_skeleton
-cookiecutter . -o ..
-    project_name: myproject_original
-    app_name: myapp
+cookiecutter apps_skeleton
+    project_name: my_project_generated
+    app_name: my_app
 ```
 
-U ovom folderu ne radiš promjene. On je samo za usporedbu s tvojom aplikacijom.
-Onda promjene upišeš u folder `/Projects/apps_skeleton`
-Pa obrišeš ovaj dir `rm -r ../myproject_original`
-Ponovno generiraš `cookiecutter . -o ..`
-I ponocno usporediš `diff -r ../myproject_original ../myproject`
-Dok ne nestanu razlike.
+Ako već postoji folder `my_project_generated`, onda ga prvo treba obrisati prije ponovnog generiranja 
+`rm -r my_project_generated`
+
+Sad možemo usporediti novi projekt s generiranim direktorijem, i odabrane promjene dodati u skeleton projekt.
+`diff -r ../my_project_generated ../my_project`
+
+Odabrane promjene upišeš u folder `apps_skeleton`
+
+Možeš ponoviti generiranje dok ne nestanu razlike.
 
 ### Authentication
 
@@ -253,8 +262,8 @@ Example of `test_celery.py` file that use `task_always_eager`
 ```python
 import pytest
 
-from myapp.app import init_celery
-from myapi.tasks.example import dummy_task
+from my_app.app import init_celery
+from my_app.tasks.example import dummy_task
 
 
 @pytest.fixture(scope="session")
@@ -283,7 +292,7 @@ For gunicorn you only need to run the following commands
 
 ```
 pip install gunicorn
-gunicorn myapi.wsgi:app
+gunicorn my_app.wsgi:app
 ```
 
 And that's it ! Gunicorn is running on port 8000
@@ -296,7 +305,7 @@ Pretty much the same as gunicorn here
 
 ```
 pip install uwsgi
-uwsgi --http 127.0.0.1:5000 --module myapi.wsgi:app
+uwsgi --http 127.0.0.1:5000 --module my_app.wsgi:app
 ```
 
 And that's it ! Uwsgi is running on port 5000
@@ -322,14 +331,14 @@ This code will include a dummy task located in `yourproject/yourapp/tasks/exampl
 In your project path, once dependencies are installed, you can just run
 
 ```
-celery -A myapi.celery_app:app worker --loglevel=info
+celery -A my_app.celery_app:app worker --loglevel=info
 ```
 
 If you have updated your configuration for broker / result backend your workers should start and you should see the example task avaible
 
 ```
 [tasks]
-  . myapi.tasks.example.dummy_task
+  . my_app.tasks.example.dummy_task
 ```
 
 
@@ -338,7 +347,7 @@ If you have updated your configuration for broker / result backend your workers 
 To run a task you can either import it and call it
 
 ```python
->>> from myapi.tasks.example import dummy_task
+>>> from my_app.tasks.example import dummy_task
 >>> result = dummy_task.delay()
 >>> result.get()
 'OK'
@@ -347,8 +356,8 @@ To run a task you can either import it and call it
 Or use the celery extension
 
 ```python
->>> from myapi.extensions import celery
->>> celery.send_task('myapi.tasks.example.dummy_task').get()
+>>> from my_app.extensions import celery
+>>> celery.send_task('my_app.tasks.example.dummy_task').get()
 'OK'
 ```
 
@@ -364,11 +373,11 @@ Dockerfile has intentionally no entrypoint to allow you to run any command from 
 Note that you still need to init your app on first start, even when using compose.
 
 ```bash
-docker build -t myapp .
+docker build -t my_app .
 ...
-docker run --env-file=.flaskenv myapp init
-docker run --env-file=.flaskenv -p 5000:5000 myapp run -h 0.0.0.0
- * Serving Flask app "myapi.app:create_app" (lazy loading)
+docker run --env-file=.flaskenv my_app init
+docker run --env-file=.flaskenv -p 5000:5000 my_app run -h 0.0.0.0
+ * Serving Flask app "my_app.app:create_app" (lazy loading)
  * Environment: development
  * Debug mode: on
  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
