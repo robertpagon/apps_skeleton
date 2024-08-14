@@ -1,3 +1,18 @@
+# Moj popis
+patch*
+proba*
+venv/
+__pycache__/
+shared_folders/app_server/sources/[a-zA-Z]*/*
+**/*.log
+**/*.zip
+**/*.gz
+**/*.pdf
+**/*.csv
+
+
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
