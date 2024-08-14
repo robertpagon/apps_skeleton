@@ -1,42 +1,6 @@
-# cookiecutter-flask-restful
+# The Pagons app skeleton
 
-Cookiecutter template for flask restful, including blueprints, application factory, and more
-
-[![Build Status](https://travis-ci.org/robertpagon/apps_skeleton.svg?branch=master)](https://travis-ci.org/robertpagon/apps_skeleton)
-
-## Introduction
-
-This cookie cutter is a very simple boilerplate for starting a REST api using Flask, flask-restful, marshmallow, SQLAlchemy and jwt.
-It comes with basic project structure and configuration, including blueprints, application factory and basics unit tests.
-
-Features
-
-* Simple flask application using application factory, blueprints
-* [Flask command line interface](http://flask.pocoo.org/docs/1.0/cli/) integration
-* Simple cli implementation with basics commands (init, run, etc.)
-* [Flask Migrate](https://flask-migrate.readthedocs.io/en/latest/) included in entry point
-* Authentication using [Flask-JWT-Extended](http://flask-jwt-extended.readthedocs.io/en/latest/) including access token and refresh token management
-* Simple pagination utils
-* Unit tests using pytest and factoryboy
-* Configuration using environment variables
-* OpenAPI json file and swagger UI
-
-Used packages :
-
-* [Flask](http://flask.pocoo.org/)
-* [Flask-RESTful](https://flask-restful.readthedocs.io/en/latest/)
-* [Flask-Migrate](https://flask-migrate.readthedocs.io/en/latest/)
-* [Flask-SQLAlchemy](http://flask-sqlalchemy.pocoo.org/2.3/)
-* [Flask-Marshmallow](https://flask-marshmallow.readthedocs.io/en/latest/)
-* [Flask-JWT-Extended](http://flask-jwt-extended.readthedocs.io/en/latest/)
-* [marshmallow-sqlalchemy](https://marshmallow-sqlalchemy.readthedocs.io/en/latest/)
-* [passlib](https://passlib.readthedocs.io/en/stable/)
-* [tox](https://tox.readthedocs.io/en/latest/)
-* [pytest](https://docs.pytest.org/en/latest/)
-* [factoryboy](http://factoryboy.readthedocs.io/en/latest/)
-* [dotenv](https://github.com/theskumar/python-dotenv)
-* [apispec](https://github.com/marshmallow-code/apispec)
-
+Cookiecutter template for flask web and restful, including blueprints, application factory, and more
 
 ## Usage
 
@@ -59,29 +23,42 @@ Used packages :
 
 Make sure you have cookiecutter installed in your local machine.
 
-You can install it using this command : `pip install cookiecutter`
+You can install it using this command : 
+- `pipx install cookiecutter` - Ovako se instalira za sve, kao naredba - preporučeno
+- `pip install cookiecutter` - Ovako se instalira za sve
 
 #### Create your project
 
-Starting a new project is as easy as running this command at the command line. No need to create a directory first, the cookiecutter will do it for you.
+Najbolje je klonirati skeleton projekt i iz njega kreirati novi projekt.
+U tom slučaju se skeleton projekt može dodatno razvijati i pushati u git.
+```
+mkdir /Projects/apps_skeleton
+cd /Projects/apps_skeleton
+git clone https://github.com/robertpagon/apps_skeleton.git
+cookiecutter . -o ..
+```
+Tu se odabere naziv projekta (npr. `myproject`) i ime aplikacije (npr. `myapp`)
 
-To create a project run the following command and follow the prompt
-
+A može se i samo kreirati novi projekt bez kloniranja skeleton projekta:
 `cookiecutter https://github.com/robertpagon/apps_skeleton`
 
 #### Install project requirements
-
-Let's say you named your app `myapi` and your project `myproject`
 
 You can install it using pip :
 
 ```
 cd myproject
+virtualenv venv
+source venv/bin/activate
 pip install -r requirements.txt
+```
+
+Može i ovo pa se onda nešto lokalno instalira kao pravi python package.
+```
 pip install -e .
 ```
 
-You now have access to cli commands and can init your project
+#### Inicijalizacija baze
 
 ```
 flask db init
@@ -104,12 +81,19 @@ need to update / add entries in `.flaskenv` file.
 It's filled by default with following content:
 
 ```
+export FLASK_RUN_PORT=5183 # ako nećeš da bude na portu 5000
+export FLASK_DEBUG=1 - Automatski učitaj promjenu sorsova
+
 FLASK_ENV=development
 FLASK_APP="myapp.app:create_app"
 SECRET_KEY=changeme
 DATABASE_URI="sqlite:///myapp.db"
 CELERY_BROKER_URL=amqp://guest:guest@localhost/  # only present when celery is enabled
 CELERY_RESULT_BACKEND_URL=amqp://guest:guest@localhost/  # only present when celery is enabled
+
+WEB
+   export APP_NAME="myapp"
+   export APP_SETTINGS=myapp.config.ProductionConfig
 ```
 
 Avaible configuration keys:
@@ -120,8 +104,35 @@ Avaible configuration keys:
 * `CELERY_BROKER_URL`: URL to use for celery broker, only when you enabled celery
 * `CELERY_RESULT_BACKEND_URL`: URL to use for celery result backend (e.g: `redis://localhost`)
 
-### Authentication
+### Pokretanje
+`flask run`
 
+Provjera radi li aplikacija
+```
+http://localhost:5183/
+curl -X GET -H "Content-Type: application/json" http://localhost:5183/api/v1/users
+curl -X GET -H "Content-Type: application/json" http://localhost:5183/api/v1/users/1
+```
+
+## Daljnji razvoj skeletona
+Da bi mogli dalje razvijati skeleton, treba usporediti novi projekt s trenutnim stanjem skeletona, i odabrane promjene dodati u skeleton projekt.
+
+Usporedba novog projekta s trenutnim stanjem skeletona:
+```
+cd /Projects/apps_skeleton
+cookiecutter . -o ..
+    project_name: myproject_original
+    app_name: myapp
+```
+
+U ovom folderu ne radiš promjene. On je samo za usporedbu s tvojom aplikacijom.
+Onda promjene upišeš u folder `/Projects/apps_skeleton`
+Pa obrišeš ovaj dir `rm -r ../myproject_original`
+Ponovno generiraš `cookiecutter . -o ..`
+I ponocno usporediš `diff -r ../myproject_original ../myproject`
+Dok ne nestanu razlike.
+
+### Authentication
 
 To access protected resources, you will need an access token. You can generate 
 an access and a refresh token using `/auth/login` endpoint, example using curl
@@ -242,7 +253,7 @@ Example of `test_celery.py` file that use `task_always_eager`
 ```python
 import pytest
 
-from myapi.app import init_celery
+from myapp.app import init_celery
 from myapi.tasks.example import dummy_task
 
 
@@ -492,4 +503,44 @@ This come with a very simple extension that allow you to override basic settings
 * Add flake8 to tox
 * Configuration file cannot be overridden by `MYAPP CONFIG` env variable anymore
 * various cleanups (unused imports, removed `configtest.py` file, flake8 errors)
+
+
+
+
+
+[![Build Status](https://travis-ci.org/robertpagon/apps_skeleton.svg?branch=master)](https://travis-ci.org/robertpagon/apps_skeleton)
+
+## Introduction
+
+This cookie cutter is a very simple boilerplate for starting a REST api using Flask, flask-restful, marshmallow, SQLAlchemy and jwt.
+It comes with basic project structure and configuration, including blueprints, application factory and basics unit tests.
+
+Features
+
+* Simple flask application using application factory, blueprints
+* [Flask command line interface](http://flask.pocoo.org/docs/1.0/cli/) integration
+* Simple cli implementation with basics commands (init, run, etc.)
+* [Flask Migrate](https://flask-migrate.readthedocs.io/en/latest/) included in entry point
+* Authentication using [Flask-JWT-Extended](http://flask-jwt-extended.readthedocs.io/en/latest/) including access token and refresh token management
+* Simple pagination utils
+* Unit tests using pytest and factoryboy
+* Configuration using environment variables
+* OpenAPI json file and swagger UI
+
+Used packages :
+
+* [Flask](http://flask.pocoo.org/)
+* [Flask-RESTful](https://flask-restful.readthedocs.io/en/latest/)
+* [Flask-Migrate](https://flask-migrate.readthedocs.io/en/latest/)
+* [Flask-SQLAlchemy](http://flask-sqlalchemy.pocoo.org/2.3/)
+* [Flask-Marshmallow](https://flask-marshmallow.readthedocs.io/en/latest/)
+* [Flask-JWT-Extended](http://flask-jwt-extended.readthedocs.io/en/latest/)
+* [marshmallow-sqlalchemy](https://marshmallow-sqlalchemy.readthedocs.io/en/latest/)
+* [passlib](https://passlib.readthedocs.io/en/stable/)
+* [tox](https://tox.readthedocs.io/en/latest/)
+* [pytest](https://docs.pytest.org/en/latest/)
+* [factoryboy](http://factoryboy.readthedocs.io/en/latest/)
+* [dotenv](https://github.com/theskumar/python-dotenv)
+* [apispec](https://github.com/marshmallow-code/apispec)
+
 
