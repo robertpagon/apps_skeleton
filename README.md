@@ -1,4 +1,4 @@
-# The Pagons app skeleton
+# The Pagons App Skeleton
 
 Cookiecutter template for flask web and restful, including blueprints, application factory, and more
 
