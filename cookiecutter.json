@@ -1,6 +1,6 @@
 {
-    "project_name": "apps_skeleton_project_original",
-    "app_name": "apps_skeleton",
+    "project_name": "my_project",
+    "app_name": "my_app",
     "python_version": ["3.8", "3.7", "3.6"],
     "tox_python_env": "py{{ cookiecutter.python_version|replace('.','') }}",
     "use_celery": ["no", "yes"],
