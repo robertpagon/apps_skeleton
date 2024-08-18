@@ -1,12 +1,16 @@
 # {{cookiecutter.app_name}}/server/user/views.py
 
-
+# REST
 from flask import render_template, Blueprint, url_for, redirect, flash, request
 from flask_login import login_user, logout_user, login_required
 
+# WEB
 from {{cookiecutter.app_name}}.extensions import bcrypt, db
 from {{cookiecutter.app_name}}.server.models import User
 from {{cookiecutter.app_name}}.server.user.forms import LoginForm, RegisterForm
+
+# Sunčan
+from bus_logic import myapp
 
 
 user_blueprint = Blueprint("user", __name__)

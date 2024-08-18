@@ -1,0 +1,6 @@
+FROM dpage/pgadmin4
+COPY servers.json /pgadmin4
+
+# Ne znam radi li ovo. Mislim da ne, da to treba nekak popraviti.
+COPY secrets/pgpass.txt /
+RUN chmod 400 /pgpass.txt

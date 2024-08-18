@@ -16,6 +16,7 @@ from {{cookiecutter.app_name}}.extensions import bcrypt
 from {{cookiecutter.app_name}}.extensions import toolbar
 from {{cookiecutter.app_name}}.extensions import bootstrap
 
+
 def create_app(testing=False):
     """Application factory, used to create application"""
     app = Flask("{{cookiecutter.app_name}}",
@@ -39,6 +40,11 @@ def create_app(testing=False):
 {%- if cookiecutter.use_celery == "yes" %}
     init_celery(app)
 {%- endif %}
+
+    from bus_logic import myapp
+    ''' Ovdje se može ...
+    '''
+    print(f"NAZIV APLIKACIJE JE: {myapp.recognize_source_from_filename('MYAPP_njuskalo_nesto.py')} (Trebalo bi biti MYAPP)")
 
     # WEB
     # flask login

@@ -1,0 +1,14 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "Piano Export",
+            "Group": "Server Group 1",
+            "Port": 5432,
+            "Username": "postgres",
+            "PassFile": "/pgpass",
+            "Host": "postgres",
+            "MaintenanceDB": "piano_export",
+            "Comment": "This server is used to access data exported form Piano"
+        }
+    }
+}

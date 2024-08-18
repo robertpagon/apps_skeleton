@@ -1,0 +1,77 @@
+sftp_server:
+    # host: uploaddwh01.njuskalo.hr
+    host: sftp  # za dev okolinu
+
+# SMTP_SERVER = 'smtp.Multicom.hr'
+# SMTP_SERVER_PORT = '25'
+
+db_connection:
+    host: postgres
+    port: 5432
+    db: piano_export
+    user: postgres
+
+load_statistics:
+    schema: traffic
+    table: load_statistics
+
+operaters:
+    # from: "Dubravko.Makarun@njuskalo.hr"
+    from: "info@multicom.hr"  # Ovako mora biti za slanje s multicomovog smtp servera
+    to: "rspagon@multicom.hr"
+    cc: "robert.pagon@gmail.com"
+    # cc: "dubravko.makarun@njuskalo.hr,josipa.vukelic@njuskalo.hr,alen.zokovic@njuskalo.hr,kristina.basic@njuskalo.hr,karolina.vrdoljak@njuskalo.hr,klara.ivancic@njuskalo.hr,tomislav.kranjec@njuskalo.hr"
+    stats_subject: "Završila je obrada učitavanja" 
+    stats_body: "Poštovani,\n\nzavršila je obrada učitavanja.<ERRORS><WARNINGS>\nBroj datoteka po izvoru:\n<FILE_COUNT_PER_SOURCE>\nBroj redaka po datoteci:\n<ROWS_COUNT_PER_FILE>\nUkupno trajanje cijele obrade: <JOB_DURATION_M>:<JOB_DURATION_S> min.\n"
+    
+# Najveći broj redova koji se šalje u jednoj datoteci
+max_rows_per_file: 1000000
+# Broj redova kad je već vrijeme za upozorenje
+max_rows_per_file_warn_percent: 70
+
+#
+# Ovo je jednako za sve sourceove.
+# A može se definirati na nivou pojedinog sourcea. Npr. stavi 
+#   sources.piano.delete_files_on_sftp_server=True
+#   da briše samo piano fajlove.
+# Ili ovo mogu biti default vrijednosti, a za pojedine sourceove se može definirati drugačije.
+#
+delete_files_on_sftp_server: false
+date_time_formats:
+    - "yyyy-mm-ddThhmi"
+time_formats:
+    - "hhmi"
+archive_retention_days: 60                        # Retencija u folderu ARCHIVE 
+
+#
+# Ovdje su postavke na nivou pojedinog sourcea
+#
+sources:
+    piano:
+        filenames:
+            - "piano_[NAME]_[DATE][CSV][ZIP]": 
+                expected_cnt: 10
+            - "piano_[NAME]_[DATE]_[TIME_FROM]_[TIME_TO][CSV][ZIP]":
+                expected_cnt:
+        targeted_tables:   # <NAME>: <schema>.<tablica>
+            dailyvisit: dwh_extract.dailyvisit
+            hourlyvisit: dwh_extract.dailyvisit
+        csv_delimiter: ";" # "\t"
+    offerista:
+        filenames:
+            - "offerista_[NAME]_[DATE_TIME]_[IGNORE][ZIP]":
+                expected_cnt: 15
+        targeted_tables:   # <NAME>: <schema>.<tablica>
+            brochuredailyexport: dwh_extract.brochuremonthlyexport
+            brochuremonthlyexport: dwh_extract.brochuremonthlyexport
+        csv_delimiter: ","
+
+regex_patterns:
+  "NAME": "[a-zA-Z0-9]+"
+  "DATE": "[0-9-]+"
+  "DATE_TIME": "[T0-9-]+"
+  "TIME_FROM": "[0-9]+"
+  "TIME_TO": "[0-9]+"
+  "IGNORE": "[a-zA-Z0-9]+"
+  "CSV": ".csv"
+  "ZIP": "(.zip|.gz)*"

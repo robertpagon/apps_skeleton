@@ -134,7 +134,14 @@ Ako već postoji folder `my_project_generated`, onda ga prvo treba obrisati prij
 `rm -r my_project_generated`
 
 Sad možemo usporediti novi projekt s generiranim direktorijem, i odabrane promjene dodati u skeleton projekt.
-`diff -r ../my_project_generated ../my_project`
+`diff -r \
+--exclude=__pycache__ \
+--exclude=venv \
+--exclude=cookiecutter-options.yml \
+--exclude=apispec.py \
+--exclude=redoc.j2 \
+--exclude=swagger.j2 \
+my_project* > diff.txt`
 
 Odabrane promjene upišeš u folder `apps_skeleton`
 
@@ -553,3 +560,26 @@ Used packages :
 * [apispec](https://github.com/marshmallow-code/apispec)
 
 
+### pgAdmin
+Web gui za pregled PostgreSQL baze: 
+[localhost:5555](http://localhost:5555)
+- Username: piano_export@njuskalo.hr
+- Password: postgres
+
+Otvori 
+- Server Group 1: Piano Export
+  - Databases: piano_export
+    - Schema: dwh_export
+      - Table: dailyvisit, brochuremonthlyexport
+
+## Datoteke
+- `servers.json`
+  - Da se u pgAdmin ne treba svaki puta ručno definirati konekciju na server
+- `piano_export.sql`
+  - Kreiranje baze, scheme, tablice
+- `pgpass.txt`
+  - Ovaj se koristi za server postgres
+    - Da bi `psql` mogao do baze
+  - A može se staviti i u pgadmin
+    - Da se ne mora upisivati lozinka
+    - Stavil sam, ali nešto ne radi

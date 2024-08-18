@@ -13,6 +13,7 @@ services:
     image: {{cookiecutter.app_name}}
     build: .
     command: {{web_command}}
+    # command: ["sleep","infinity"] # Za debugiranje ako pukne {{web_command}}
     env_file:
       - ./.flaskenv
     environment:
@@ -26,6 +27,38 @@ services:
       - ./db/:/db/
     ports:
       - "5183:5000"
+      
+{%- if cookiecutter.use_postgres == "yes" %}
+    postgres:
+        build:
+          dockerfile: dockerfiles/Dockerfile_postgres.yml
+        container_name: postgres
+        volumes:
+          # - ./secrets/id_rsa:/.ssh/keys/id_rsa:ro
+          - ./secrets/ssh_host_ed25519_key.pub:/.ssh/keys/ssh_host_ed25519_key.pub:ro
+          - ./secrets/ssh_host_rsa_key.pub:/.ssh/keys/ssh_host_rsa_key.pub:ro
+          - ./shared_folders/postgres:/shared_folder
+        ports:
+          - "5442:5432"
+
+    {%- if cookiecutter.use_pgadmin == "yes" %}
+    pgadmin:
+        # image: dpage/pgadmin4
+        build:
+          dockerfile: dockerfiles/Dockerfile_pgadmin.yml
+        environment:
+          PGADMIN_DEFAULT_EMAIL: piano_export@njuskalo.hr
+          PGADMIN_DEFAULT_PASSWORD: postgres
+        ports:
+          - "5555:80"
+        container_name: pgadmin
+        volumes:
+            # - ./secrets/pgpass.txt:/pgpass.txt
+            - ./servers.json:/pgadmin4/servers.json
+            - ./shared_folders/pgadmin:/shared_folder
+    {%- endif %}
+{%- endif %}
+
 {%- if cookiecutter.use_celery == "yes" %}
   rabbitmq:
     image: rabbitmq

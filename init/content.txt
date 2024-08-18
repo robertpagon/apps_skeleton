@@ -1,0 +1,3 @@
+Fajlovi potrebni za inicijalizaciju svega skupa.
+Za pojedine dockere.
+To su fajlovi koji ne trebaju biti u dockerima, nego se koriste za pokretanje dockera.

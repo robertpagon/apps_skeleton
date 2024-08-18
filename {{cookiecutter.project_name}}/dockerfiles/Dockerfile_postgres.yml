@@ -1,0 +1,19 @@
+#FROM postgres:latest
+# Ova još ne forsira authentication type 10
+FROM postgres:13
+
+RUN apt-get update
+RUN apt-get install nano -y
+
+# RUN echo "*:*:postgres:postgres:postgres" > /root/.pgpass
+# RUN echo "*:*:*:postgres:postgres" > /root/.pgpass
+COPY /secrets/.pgpass /root/.pgpass
+RUN chmod 0600 /root/.pgpass
+
+# Set the environment variables
+ENV POSTGRES_DB public
+ENV POSTGRES_USER postgres
+ENV POSTGRES_PASSWORD postgres
+
+# Copy the SQL file to the image
+COPY ../init/postgres/piano_export.sql /docker-entrypoint-initdb.d/
