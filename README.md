@@ -110,7 +110,7 @@ Avaible configuration keys:
 * `CELERY_RESULT_BACKEND_URL`: URL to use for celery result backend (e.g: `redis://localhost`)
 
 ### Pokretanje
-`flask run`
+`flask --app my_app/app.py run`
 
 Provjera radi li aplikacija
 ```
@@ -119,19 +119,19 @@ curl -X GET -H "Content-Type: application/json" http://localhost:5183/api/v1/use
 curl -X GET -H "Content-Type: application/json" http://localhost:5183/api/v1/users/1
 ```
 
-## Daljnji razvoj skeletona
+## Ažuriranje skeletona
 
 Da bi mogli dalje razvijati skeleton, treba novo razvijenu logiku dodati u skeleton.
 Da bi mogli vidjeti sve promjene u novom projektu, trebamo generirati još jedan projekt iz skeletona.
 
 ```
 cookiecutter apps_skeleton
-    project_name: my_project_generated
+    project_name: my_project_readonly
     app_name: my_app
 ```
 
-Ako već postoji folder `my_project_generated`, onda ga prvo treba obrisati prije ponovnog generiranja 
-`rm -r my_project_generated`
+Ako već postoji folder `my_project_readonly`, onda ga prvo treba obrisati prije ponovnog generiranja 
+`rm -r my_project_readonly`
 
 Sad možemo usporediti novi projekt s generiranim direktorijem, i odabrane promjene dodati u skeleton projekt.
 `diff -r \

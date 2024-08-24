@@ -10,7 +10,7 @@ from {{cookiecutter.app_name}}.server.models import User
 from {{cookiecutter.app_name}}.server.user.forms import LoginForm, RegisterForm
 
 # Sunčan
-from bus_logic import myapp
+from {{cookiecutter.app_name}}.bus_logic import myapp
 
 
 user_blueprint = Blueprint("user", __name__)

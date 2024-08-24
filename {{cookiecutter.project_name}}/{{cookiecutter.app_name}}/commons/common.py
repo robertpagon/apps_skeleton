@@ -18,7 +18,7 @@ from email.mime.application import MIMEApplication
 from email.utils import COMMASPACE
 from email.mime.multipart import MIMEMultipart
 
-import consts, common
+from {{cookiecutter.app_name}}.commons import consts, common
 
 def init(script_name):
     '''

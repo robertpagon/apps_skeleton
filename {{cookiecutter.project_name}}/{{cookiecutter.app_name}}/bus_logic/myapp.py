@@ -1,20 +1,4 @@
-#!/usr/bin/python3
-
-'''
------------------------------------------------------------------------------
-Prijenos datoteka sa sFTP servera u bazu
-
-Usage:
-  ./sftp_to_db.py [-h]  [<config_file>] [--no-dwld]
-
-Options:
-  -h --help          Show this screen
-  <config_file>      Konfiguracijski fajl. Default: sftp_to_db.yml
-  --no-dwld          Nemoj raditi download sa sFTP servera, samo obradi skinute fajlove
------------------------------------------------------------------------------
-'''
-
-from commons import common, consts
+from my_app.commons import common, consts
 
 import sys
 import os, time
@@ -36,12 +20,12 @@ logfile = common.init(THIS_SCRIPT)
 '''
     Obrada command-line parametara
 '''
-args = docopt(__doc__)
+# args = docopt(__doc__)
 # CONFIG_FILE = args['<config_file>'] if args['<config_file>'] else f"{THIS_SCRIPT.replace('.py', '.yml')}"
 CONFIG_FILE = THIS_SCRIPT.replace('.py', '.yml')
 CONFIG_FILE = f"{HOME_DIR_OBRADE}/{CONFIG_FILE}"
 KONFA = anyconfig.load(CONFIG_FILE) if CONFIG_FILE else None
-NO_DWLD = args['--no-dwld'] if '--no-dwld' in args else None
+NO_DWLD = None # args['--no-dwld'] if '--no-dwld' in args else None
 
 regex_patterns = KONFA['regex_patterns']
 load_statistics_desc = KONFA['load_statistics']
@@ -475,16 +459,3 @@ if __name__ == '__main__':
             logging.critical(f"{message}\n{stacktrace}")
 
 # print(f"OUTPUT={output}")
-
-
-# app = Flask(__name__) # define the Flask app
-
-# definition of the endpoints
-# @app.route('/', methods=['GET'])
-# def index():
-    # """Return the index.html page"""
-    # return render_template('index.html')
-
-# start the app
-# if __name__ == '__main__':
-    # app.run(host='0.0.0.0', port=80, debug=True)

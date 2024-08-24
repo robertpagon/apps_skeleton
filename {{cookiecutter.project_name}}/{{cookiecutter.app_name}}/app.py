@@ -37,11 +37,8 @@ def create_app(testing=False):
     configure_cli(app)
     configure_apispec(app)
     register_blueprints(app)
-{%- if cookiecutter.use_celery == "yes" %}
-    init_celery(app)
-{%- endif %}
 
-    from bus_logic import myapp
+    from {{cookiecutter.app_name}}.bus_logic import myapp
     ''' Ovdje se može ...
     '''
     print(f"NAZIV APLIKACIJE JE: {myapp.recognize_source_from_filename('MYAPP_njuskalo_nesto.py')} (Trebalo bi biti MYAPP)")
