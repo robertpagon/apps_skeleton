@@ -36,6 +36,7 @@ U tom slučaju se skeleton projekt može dodatno razvijati i pushati u git.
 ```
 git clone https://github.com/robertpagon/apps_skeleton.git
 cookiecutter apps_skeleton
+cookiecutter apps_skeleton --config-file apps_skeleton/cookiecutter.yml
 ```
 Tu se odabere naziv projekta (npr. `my_project`) i ime aplikacije (npr. `my_app`)
 

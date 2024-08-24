@@ -1,0 +1,20 @@
+# Koristim yml radije nego json jer u glupi json ne mogu pisati komentare
+#
+# Usage: cookiecutter apps_skeleton --config-file apps_skeleton/cookiecutter.yml
+#
+default_context:
+    # Projekt može sadržati više servera, a na svakom serveru mogu imati jednu ili više aplikacija
+    "project_name": "my_project"
+    "app_name": "my_app"
+    # Ova verzija određuje koji python image ću uzeti
+    "python_version": "3.8"
+    "tox_python_env": "py{{ cookiecutter.python_version|replace('.','') }}"
+    "use_postgres": ["no", "yes"]
+    "use_pgadmin": ["no", "yes"]
+    "use_celery": ["no", "yes"]
+    "admin_user_username": "admin"
+    "admin_user_email": "admin@mail.com"
+    "admin_user_password": "admin"
+    "wsgi_server": ["none", "uwsgi", "gunicorn"]
+    "_copy_without_render":
+        - "*.html"
