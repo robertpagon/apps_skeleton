@@ -24,22 +24,22 @@ db-upgrade:
 	docker-compose exec web flask db upgrade
 
 test:
-{%- if cookiecutter.use_celery == "yes"%}
+{%- if cookiecutter._use_celery == "yes"%}
 	docker-compose stop celery # stop celery to avoid conflicts with celery tests
 	docker-compose start rabbitmq redis # ensuring both redis and rabbitmq are started
 {%- endif %}
 	docker-compose run -v $(PWD)/tests:/code/tests:ro web tox -e test
-{%- if cookiecutter.use_celery == "yes"%}
+{%- if cookiecutter._use_celery == "yes"%}
 	docker-compose start celery
 {%- endif %}
 
 tox:
-{%- if cookiecutter.use_celery == "yes"%}
+{%- if cookiecutter._use_celery == "yes"%}
 	docker-compose stop celery # stop celery to avoid conflicts with celery tests
 	docker-compose start rabbitmq redis # ensuring both redis and rabbitmq are started
 {%- endif %}
-	docker-compose run -v $(PWD)/tests:/code/tests:ro web tox -e {{ cookiecutter.tox_python_env }}
-{%- if cookiecutter.use_celery == "yes"%}
+	docker-compose run -v $(PWD)/tests:/code/tests:ro web tox -e {{ cookiecutter._tox_python_env }}
+{%- if cookiecutter._use_celery == "yes"%}
 	docker-compose start celery
 {%- endif %}
 

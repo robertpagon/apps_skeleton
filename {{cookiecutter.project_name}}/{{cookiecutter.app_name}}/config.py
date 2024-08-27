@@ -24,7 +24,7 @@ class BaseConfig(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     WTF_CSRF_ENABLED = False
 
-{%- if cookiecutter.use_celery == "yes" %}
+{%- if cookiecutter._use_celery == "yes" %}
     CELERY = {
         "broker_url": os.getenv("CELERY_BROKER_URL"),
         "result_backend": os.getenv("CELERY_RESULT_BACKEND_URL"),

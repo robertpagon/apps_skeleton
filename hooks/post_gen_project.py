@@ -2,10 +2,10 @@ import os
 import sys
 import shutil
 
-use_celery = '{{cookiecutter.use_celery}}'
+_use_celery = '{{cookiecutter._use_celery}}'
 
 
-if use_celery == "no":
+if _use_celery == "no":
     base_path = os.getcwd()
     app_path = os.path.join(
         base_path,

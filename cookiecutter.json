@@ -1,0 +1,16 @@
+{
+    "project_name": "API_aplikacija",
+    "app_name": "myapi",
+    "use_postgres": ["no", "yes"],
+    "use_pgadmin": ["no", "yes"],
+    "_admin_user_username": "admin",
+    "_admin_user_email": "admin@mail.com",
+    "_admin_user_password": "admin",
+    "_use_celery": "no",
+    "_wsgi_server": "none",
+    "_python_version": "3.8",
+    "_tox_python_env": "py{{ cookiecutter._python_version|replace('.','') }}",
+    "_copy_without_render": [
+        "*.html"
+    ]
+}

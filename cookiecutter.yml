@@ -3,18 +3,25 @@
 # Usage: cookiecutter apps_skeleton --config-file apps_skeleton/cookiecutter.yml
 #
 default_context:
-    # Projekt može sadržati više servera, a na svakom serveru mogu imati jednu ili više aplikacija
-    "project_name": "my_project"
-    "app_name": "my_app"
-    # Ova verzija određuje koji python image ću uzeti
-    "python_version": "3.8"
-    "tox_python_env": "py{{ cookiecutter.python_version|replace('.','') }}"
+    "project_name": "my_project" # Projekt može sadržati više servera
+    "app_name": "my_app" # Na svakom serveru mogu imati jednu ili više aplikacija
     "use_postgres": ["no", "yes"]
     "use_pgadmin": ["no", "yes"]
-    "use_celery": ["no", "yes"]
-    "admin_user_username": "admin"
-    "admin_user_email": "admin@mail.com"
-    "admin_user_password": "admin"
-    "wsgi_server": ["none", "uwsgi", "gunicorn"]
+    "_admin_user_username": "admin"
+    "_admin_user_email": "admin@mail.com"
+    "_admin_user_password": "admin"
+    "_use_celery": "no"  #["no", "yes"]
+    "_wsgi_server": "none" # ["none", "uwsgi", "gunicorn"]
+    "_python_version": "3.8" # Ova verzija određuje koji python image ću uzeti
+    "_tox_python_env": "py{{ cookiecutter._python_version|replace('.','') }}"
     "_copy_without_render":
         - "*.html"
+# cookiecutters_dir: "/home/audreyr/my-custom-cookiecutters-dir/"
+#       Ovamo kreira nove projekte
+# replay_dir: "/home/audreyr/my-custom-replay-dir/"
+#       Ovamo sprema kaj je napravil da bi se kasnije moglo ponoviti
+# abbreviations: # Ovo se može koristiti kod poziva cookiecutter-a da se ne piše puno
+    # pp: https://github.com/audreyfeldroy/cookiecutter-pypackage.git
+    # gh: https://github.com/{0}.git
+    # bb: https://bitbucket.org/{0}
+    # Npr. cookiecutter gh:rspagon => https://github.com/rspagon.git

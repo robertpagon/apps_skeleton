@@ -8,7 +8,7 @@ from {{cookiecutter.app_name}}.extensions import db
 from {{cookiecutter.app_name}}.extensions import jwt
 from {{cookiecutter.app_name}}.extensions import migrate
 
-{%- if cookiecutter.use_celery == "yes"%}, celery{% endif%}
+{%- if cookiecutter._use_celery == "yes"%}, celery{% endif%}
 
 # WEB
 from {{cookiecutter.app_name}}.extensions import login_manager
@@ -130,7 +130,7 @@ def register_blueprints(app):
     app.register_blueprint(user_blueprint)
     app.register_blueprint(main_blueprint)
 
-{%- if cookiecutter.use_celery == "yes" %}
+{%- if cookiecutter._use_celery == "yes" %}
 
 
 def init_celery(app=None):

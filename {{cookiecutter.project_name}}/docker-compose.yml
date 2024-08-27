@@ -1,6 +1,6 @@
-{%- if cookiecutter.wsgi_server == "uwsgi" -%}
+{%- if cookiecutter._wsgi_server == "uwsgi" -%}
 {% set web_command = "uwsgi --http 0.0.0.0:5183 --module " + cookiecutter.app_name + ".wsgi:app" %}
-{%- elif cookiecutter.wsgi_server == "gunicorn" -%}
+{%- elif cookiecutter._wsgi_server == "gunicorn" -%}
 {% set web_command = "gunicorn -b 0.0.0.0:5183 " + cookiecutter.app_name + ".wsgi:app" %}
 {%- else -%}
 {% set web_command = "flask run -h 0.0.0.0" %}
@@ -18,7 +18,7 @@ services:
       - ./.flaskenv
     environment:
       - DATABASE_URI=sqlite:////db/{{cookiecutter.app_name}}.db
-{%- if cookiecutter.use_celery == "yes"%}
+{%- if cookiecutter._use_celery == "yes"%}
       - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq
       - CELERY_RESULT_BACKEND_URL=redis://redis
 {%- endif %}
@@ -59,7 +59,7 @@ services:
     {%- endif %}
 {%- endif %}
 
-{%- if cookiecutter.use_celery == "yes" %}
+{%- if cookiecutter._use_celery == "yes" %}
   rabbitmq:
     image: rabbitmq
   redis:
